@@ -1,22 +1,35 @@
 package config
 
-import "io/ioutil"
+import (
+	"io/ioutil"
 
-//DbConfig ..
+	"gopkg.in/yaml.v3"
+)
+
+//DbConfig ...
 type DbConfig struct {
 	Driver string `yaml:"driver"`
 }
 
-//Config ..
+//Config ...
 type Config struct {
 	DB      DbConfig `yaml:"db"`
 	Version string   `yaml:"version"`
 }
 
-//LoadConfig ..
+//LoadConfig ...
 func LoadConfig(filename string) (*Config, error) {
 	file, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
+
+	var c = &Config{}
+	err = yaml.Unmarshal(file, c)
+	if err != nil {
+		return nil, err
+	}
+
+	return c, nil
+
 }
