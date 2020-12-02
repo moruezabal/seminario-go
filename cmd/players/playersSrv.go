@@ -6,10 +6,21 @@ import (
 	"os"
 
 	"github.com/moruezabal/seminario-go/internal/config"
+	"github.com/moruezabal/seminario-go/internal/service/players"
 )
 
 func main() {
 
+	cfg := readConfig()
+	service, _ := players.New(cfg)
+
+	for _, m := range service.FindAll() {
+		fmt.Println(m)
+	}
+
+}
+
+func readConfig() *config.Config {
 	configFile := flag.String("config", "./config.yaml", "this is the service config")
 	flag.Parse()
 
@@ -19,7 +30,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(cfg.DB.Driver)
-	fmt.Println(cfg.Version)
+	return cfg
 
 }
