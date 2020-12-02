@@ -6,13 +6,21 @@ import (
 	"os"
 
 	"github.com/moruezabal/seminario-go/internal/config"
+	"github.com/moruezabal/seminario-go/internal/database"
 	"github.com/moruezabal/seminario-go/internal/service/players"
 )
 
 func main() {
 
 	cfg := readConfig()
-	service, _ := players.New(cfg)
+
+	db, err := database.NewDatabase(cfg)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	service, _ := players.New(db, cfg)
 
 	for _, m := range service.FindAll() {
 		fmt.Println(m)

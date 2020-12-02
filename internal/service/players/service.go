@@ -1,6 +1,9 @@
 package players
 
-import "github.com/moruezabal/seminario-go/internal/config"
+import (
+	"github.com/jmoiron/sqlx"
+	"github.com/moruezabal/seminario-go/internal/config"
+)
 
 //Player ...
 type Player struct {
@@ -17,12 +20,13 @@ type PlayersService interface {
 }
 
 type service struct {
+	db   *sqlx.DB
 	conf *config.Config
 }
 
 // New ...
-func New(c *config.Config) (PlayersService, error) {
-	return service{c}, nil
+func New(db *sqlx.DB, c *config.Config) (PlayersService, error) {
+	return service{db, c}, nil
 
 }
 

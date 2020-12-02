@@ -1,13 +1,15 @@
 package database
 
 import (
+	"errors"
+
 	"github.com/jmoiron/sqlx"
+	_ "github.com/mattn/go-sqlite3" //adding sqlite support
 	"github.com/moruezabal/seminario-go/internal/config"
-	_ "github.com/mattn/go-sqlite3" // adding sqlite driver support
 )
 
 //NewDatabase ...
-func NewDatabase(conf config.Config) (*sqlx.DB, error) {
+func NewDatabase(conf *config.Config) (*sqlx.DB, error) {
 	switch conf.DB.Type {
 	case "sqlite3":
 		db, err := sqlx.Open(conf.DB.Driver, conf.DB.Conn)
@@ -15,16 +17,14 @@ func NewDatabase(conf config.Config) (*sqlx.DB, error) {
 			return nil, err
 		}
 
-		err = db.Ping(){
+		err = db.Ping()
 		if err != nil {
 			return nil, err
-			}
 		}
 
 		return db, nil
-	
 	default:
-		return nil, errors.new("invalid db type")
+		return nil, errors.New("invalid db type")
 
 	}
 
