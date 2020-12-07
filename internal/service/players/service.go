@@ -12,8 +12,8 @@ type Player struct {
 	dorsal int
 }
 
-//PlayerService ...
-type PlayersService interface {
+//Service ...
+type Service interface {
 	AddPlayer(Player) error
 	FindByID(int) *Player
 	FindAll() []*Player
@@ -40,6 +40,6 @@ func (s service) FindByID(ID int) *Player {
 
 func (s service) FindAll() []*Player {
 	var list []*Player
-	list = append(list, &Player{0, "Juan", 5})
+	s.db.Select(&list, "SELECT * FROM players")
 	return list
 }
